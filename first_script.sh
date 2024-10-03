@@ -6,12 +6,12 @@ done < extension_map.txt
 
 while read -r ext; do
     ext=$(echo "$ext" | xargs | sed 's/\.//')
-    lang="${ext_map[$ext]}"
+    dir_name="${ext_map[$ext]}"
 
 
-    if [[ -n "$lang" ]]; then
-        mkdir -p "sorted/$lang"
-        echo "Folder created: $lang"
+    if [[ -n "$dir_name" ]]; then
+        mkdir -p "sorted/$dir_name"
+        echo "Folder created: $dir_name"
         clear
     else
         echo "No mapping for: $ext"
