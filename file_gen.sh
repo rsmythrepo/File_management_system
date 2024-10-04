@@ -7,7 +7,7 @@ mapping_file="extension_map.txt"
 total_files=50
 
 # Directory to create the files in
-output_dir="test_files"
+output_dir="."
 
 # Check if the mapping file exists
 if [[ ! -f "$mapping_file" ]]; then
