@@ -1,3 +1,4 @@
+#!/bin/bash
 # File Sorter 
 
 # input: 50 files, 10
@@ -7,7 +8,6 @@
 # output: txt file
 
 declare -A ext_map
-
 ext_extract () {
         extensions=($(find . -type f -exec basename {} \; | grep "\." |sed 's/.*\.//'))
         extensions_red=()
@@ -42,10 +42,12 @@ ext_extract () {
 }
 
 
-# function 2 - Anwar                                                                          # Make the folders based on file type (if it does not exist already)
+# function 2 - Anwar 
+# Make the folders based on file type (if it does not exist already)
 # output: append folder names to extension.txt (example .py=Python
 
 create_folders(){
+	date
 	while IFS='=' read -r ext name; do
     		ext_map["$ext"]="$name"
 	done < extension_map.txt
@@ -66,9 +68,10 @@ create_folders(){
 
 # function 3 - Raphaelle
 # Sort files by extension into the folders
-
 # Function to move files based on config file
+
 move_files_to_folders() {
+	date
     for extension in "${!ext_map[@]}"; do
 
         foldername="${ext_map[$extension]}"        
@@ -76,20 +79,27 @@ move_files_to_folders() {
 	do
 		if [[ -e "$file" ]]; 
 		then
-        		if [[ "$file" != "extension_map.txt" &&  "$file" != "file_sorter.sh" &&  "$file" != "config_file.txt" ]]
+        		if [[ "$file" != "extension_map.txt" && "$file" != ".log.log" &&  "$file" != "file_sorter.sh" &&  "$file" != "config_file.txt" ]]
 			then
         			# Match zero or more files and move them to the target folder
         			mv "$file" "$foldername/"
+				echo "$file has been moved to $foldername folder"
 			fi
 		fi
         done
     done
 }
 
-metadata(){
 
-    echo "       File Structure"
-    echo "============================="
+# function 4 - all
+# file system information
+# - file tree diagram (recursive algorithm)
+# - information on folders: size, amount of files 
+
+metadata(){
+    echo "         ==========================="
+    echo "	|       File Structure      |"
+    echo " 	 ==========================="
     base_dir="."
     find "$base_dir" -type d -not -path '*/.*' | sort | while read dir; do
         dep=$(echo $dir | sed "s|$base_dir||" | tr -cd '/' | wc -c)
@@ -97,11 +107,11 @@ metadata(){
         count=$(find "$dir" -maxdepth 1 | wc -l)
         count=$((count - 1))  # Subtract 1 to exclude the directory itself
         sizedir=$(du -sh "$dir" | awk '{print $1}')
-        echo "${indent}+---$(basename "$dir")/ [$count items, $sizedir]"
+        echo "${indent}🗂️---$(basename "$dir")/ [$count items, $sizedir]"
 
         find "$dir" -maxdepth 1 -type f -not -path '*/.*' | sort | while read file; do
             sizefile=$(du -sh "$file" | awk '{print $1}')
-            echo "${indent}    |---$(basename "$file") [$sizefile]"
+            echo "${indent}    📄|---$(basename "$file") [$sizefile]"
         done
     done
 }
@@ -110,18 +120,11 @@ metadata(){
 
 
 ext_extract
-create_folders 
-move_files_to_folders
+create_folders >> .log.log 2> >(sed 's/^/[ERROR] /' >> .log.log)
+move_files_to_folders >> .log.log 2> >(sed 's/^/[ERROR] /' >> .log.log)
 rm config_file.txt
+clear
+echo "Files has been sorted successfully..."
 sleep 1
 clear
-echo ""
 metadata
-
-# function 4 - all
-# file system information
-# - file tree diagram (recursive algorithm)
-# - information on folders: size, amount of files (table view)
-
-
-
