@@ -35,7 +35,10 @@ ext_extract () {
                 extensions_red+=("no_extension")
         fi
 
-        echo "${extensions_red[@]}" > config_file.txt
+        #eicho "${extensions_red[@]}" > config_file.txt
+	for extension in "${extensions_red[@]}"; do
+    		echo "$extension" 
+	done > config_file.txt
 }
 
 
@@ -47,14 +50,13 @@ create_folders(){
     		ext_map["$ext"]="$name"
 	done < extension_map.txt
 
-
 	while read -r ext; do
     		ext=$(echo "$ext" | xargs | sed 's/\.//')
     		dir_name="${ext_map[$ext]}"
 
 
     		if [[ -n "$dir_name" ]]; then
-        		mkdir -p "sorted/$dir_name"
+        		mkdir -p "$dir_name"
         		echo "Folder created: $dir_name"
     		else
         		echo "No mapping for: $ext"
@@ -68,15 +70,17 @@ create_folders(){
 # Function to move files based on config file
 move_files_to_folders() {
     for extension in "${!ext_map[@]}"; do
-        folder="${ext_map[$extension]}"
-        
+
+        foldername="${ext_map[$extension]}"        
 	for file in *"$extension"; 
 	do
-        	if [[ "$file" != "extension_map.txt" &&  "$file" != "file_sorter.sh" &&  "$file" != "config_file.txt" ]]
+		if [[ -e "$file" ]]; 
 		then
-
-        		# Match zero or more files and move them to the target folder
-        		mv "$file" "$folder/"
+        		if [[ "$file" != "extension_map.txt" &&  "$file" != "file_sorter.sh" &&  "$file" != "config_file.txt" ]]
+			then
+        			# Match zero or more files and move them to the target folder
+        			mv "$file" "$foldername/"
+			fi
 		fi
         done
     done
@@ -84,8 +88,7 @@ move_files_to_folders() {
 
 
 ext_extract
-create_folders
-read_config_file 
+create_folders 
 move_files_to_folders
 
 
