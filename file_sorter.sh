@@ -86,18 +86,42 @@ move_files_to_folders() {
     done
 }
 
+metadata(){
+
+    echo "       File Structure"
+    echo "============================="
+    base_dir="."
+    find "$base_dir" -type d -not -path '*/.*' | sort | while read dir; do
+        dep=$(echo $dir | sed "s|$base_dir||" | tr -cd '/' | wc -c)
+        indent=$(printf '    %.0s' $(seq 1 $dep))
+        count=$(find "$dir" -maxdepth 1 | wc -l)
+        count=$((count - 1))  # Subtract 1 to exclude the directory itself
+        sizedir=$(du -sh "$dir" | awk '{print $1}')
+        echo "${indent}+---$(basename "$dir")/ [$count items, $sizedir]"
+
+        find "$dir" -maxdepth 1 -type f -not -path '*/.*' | sort | while read file; do
+            sizefile=$(du -sh "$file" | awk '{print $1}')
+            echo "${indent}    |---$(basename "$file") [$sizefile]"
+        done
+    done
+}
+
+
+
 
 ext_extract
 create_folders 
 move_files_to_folders
-
+rm config_file.txt
+sleep 1
+clear
+echo ""
+metadata
 
 # function 4 - all
 # file system information
-# - "Loading message"
 # - file tree diagram (recursive algorithm)
 # - information on folders: size, amount of files (table view)
-# - "Your files have been sorted"
 
 
 
