@@ -76,7 +76,7 @@ move_files_to_folders() {
     	fi
 	
 	# For each extension in the map (! accesses the keys of assiative array
-	for extension in "${!ext_map[@]}";i do
+	for extension in "${!ext_map[@]}"; do
 
        	foldername="${ext_map[$extension]}"
 
