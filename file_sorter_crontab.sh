@@ -149,9 +149,34 @@ removal(){
     sed -i "/alias $alias_name=/d" "$HOME/.bashrc"
     export PATH=$(echo $PATH | sed -e 's|$HOME/.M3_sorter:||')
     rm -rf $script_path
-    echo "Removal complete. To apply changes, please log out and log in again."
+    echo "Removal complete. To apply changes, please run:"
+    echo "source ~/.bashrc"
 }
-
+crontab() {
+    path=$(pwd)
+    map="$HOME/.M3_sorter/extension_map.txt"
+    script=".m3sorter_crontab.sh"
+    cat <<EOL > "$script"
+#!/bin/bash
+declare -A ext_map
+$(declare -f ext_extract)
+$(declare -f create_folders)
+$(declare -f move_files_to_folders)
+ext_extract
+create_folders >> .log.log 2> >(sed 's/^/[ERROR] /' >> .log.log)
+move_files_to_folders >> .log.log 2> >(sed 's/^/[ERROR] /' >> .log.log)
+EOL
+    cp "$map" "$path"
+    chmod +x "$script"
+    clean_path=$(printf "%q" "$path/$script") # clear the path from spaces and spec char
+    CRON_JOB="*/3 * * * * $clean_path"
+    if crontab -l 2>/dev/null | grep -qF "$clean_path"; then
+        echo "M3sorter is already in Crontab. No changes made."
+    else
+        (crontab -l 2>/dev/null || true; echo "$CRON_JOB") | crontab -
+        echo "M3sorter is added successfully to Crontab"
+    fi
+}
 
 if [ $1 == "-setup" ]; then
 	setup
@@ -159,8 +184,8 @@ elif [ $1 == "-remove" ]; then
         removal
 elif [ $1 == "-tree" ]; then
 	metadata
-elif [ $1 == "-v" ]
-	echo "M3sorter v0.1"
+elif [ $1 == "-crontab" ]; then
+	crontab
 elif [ -z $1 ]; then
 	ext_extract
 	create_folders >> .log.log 2> >(sed 's/^/[ERROR] /' >> .log.log)
