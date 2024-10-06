@@ -1,11 +1,9 @@
 #!/bin/bash
 # File Sorter 
 
-# input: 50 files, 10
 
-# function 1 - David
-# Return the file types in a folder > filetypes.txt (unique)
-# output: txt file
+# Function 1 - David
+# Return the unnique file types in the current directory > config_file.txt 
 
 declare -A ext_map
 ext_extract () {
@@ -42,9 +40,9 @@ ext_extract () {
 }
 
 
-# function 2 - Anwar 
-# Make the folders based on file type (if it does not exist already)
-# output: append folder names to extension.txt (example .py=Python
+# Function 2 - Anwar
+# Take in the extensions to folder name map - extensions.txt 
+# Make the folders based on config_file (if it does not exist already)
 
 create_folders(){
 	date
@@ -66,35 +64,46 @@ create_folders(){
 	done < config_file.txt
 }
 
-# function 3 - Raphaelle
+# Function 3 - Raphaelle
 # Sort files by extension into the folders
-# Function to move files based on config file
 
 move_files_to_folders() {
-	date
-    for extension in "${!ext_map[@]}"; do
 
-        foldername="${ext_map[$extension]}"        
-	for file in *"$extension"; 
-	do
-		if [[ -e "$file" ]]; 
-		then
-        		if [[ "$file" != "extension_map.txt" && "$file" != ".log.log" &&  "$file" != "file_sorter.sh" &&  "$file" != "config_file.txt" ]]
+	# Check if the size of extension map assosiative array is not empty
+	if [ ${#ext_map[@]} -eq 0 ]; then
+        	echo "Error: The extension map is empty."
+        	exit 1
+    	fi
+	
+	# For each extension in the map (! accesses the keys of assiative array
+	for extension in "${!ext_map[@]}";i do
+
+       	foldername="${ext_map[$extension]}"
+
+		# Iterate over files in the current directory that match *extension
+		for file in *"$extension"; 
+		do
+			# If the file exists 
+			if [[ -e "$file" ]]; 
 			then
-        			# Match zero or more files and move them to the target folder
-        			mv "$file" "$foldername/"
-				echo "$file has been moved to $foldername folder"
+				# and the file is none of these files 
+        			if [[ "$file" != "extension_map.txt" && "$file" != ".log.log" &&  "$file" != "file_sorter.sh" &&  "$file" != "config_file.txt" && "$file" != "file_gen.sh" ]]
+				then
+					
+        				# Match zero or more files and move them to the target folder
+        				mv "$file" "$foldername/"
+					echo "$file has been moved to $foldername folder"
+				fi
 			fi
-		fi
-        done
-    done
+        	done
+    	done
 }
 
 
-# function 4 - all
-# file system information
-# - file tree diagram (recursive algorithm)
-# - information on folders: size, amount of files 
+# Function 4 - all
+# Output file system information
+# - file tree diagram 
+# - information on folders: size 
 
 metadata(){
     echo "         ==========================="
