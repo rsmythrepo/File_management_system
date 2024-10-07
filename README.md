@@ -7,16 +7,16 @@ In many organizations, data is often ingested in various file formats. This diso
 
 Learning Objective: Bash Scripting, File Management, Scheduling and Automation, Regular Expressions and Pattern Matching, Directory Structure and Permissions, Logging and Monitoring, Understanding Environment Variables, Debugging and Optimization. 
 
-Project Objective: To develop a Bash script (or that automates the sorting of ingested files into designated folders based on their file types. The script will analyze a specified directory, identify the different file types present, and move each file into its corresponding folder (e.g., CSV files into a "CSV" folder, JSON files into a "JSON" folder, etc.). Additionally, the script will provide an overview of the entire directory, including the total number of files sorted, the number of files of each type, and the size of each folder.
+Project Objective: To develop a Bash script that automates the sorting of ingested files into designated folders based on their file types. The script will analyze a specified directory, identify the different file types present, and move each file into its corresponding folder (e.g., CSV files into a "CSV" folder, JSON files into a "JSON" folder, etc.). Additionally, the script will provide an overview of the entire directory, including the total number of files sorted, the number of files of each type, and the size of each folder.
 
 Key Features of the Script:
 - File Type Identification: The script will determine the file type of each ingested file using file extensions.
-- Directory Management: It will create folders for each file type if they do not already exist.
+- Directory Management: It will create folders for each file type if they do not already exist. 
 - File Sorting: The script will move files into their respective folders based on identified types.
 - Directory Overview: At the end of execution, the script will display a summary of the entire directory, including
 
  ### Execution:
-The script can be run in the directory that needs to be sorted ./file_sorter.sh 
+Once set up ./file_sorter -setup has been completed, the script can be run from any directory by the current user.
 
 Automation & Scheduling: 
 Crontab can be used to schedule and automate running the script.
