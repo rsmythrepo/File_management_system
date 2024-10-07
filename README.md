@@ -25,4 +25,5 @@ Crontab can be used to schedule and automate running the script.
 - sudo yum install cronie
 - sudo systemctl start crond
 - sudo systemctl enable crond
+- crontab -e
 - sudo systemctl status crond
