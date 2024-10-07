@@ -25,5 +25,5 @@ Crontab can be used to schedule and automate running the script.
 - sudo yum install cronie
 - sudo systemctl start crond
 - sudo systemctl enable crond
-- crontab -e
+- crontab -e ( add job to run every minute) ( "* * * * * cd /home/path_to_directory && ./file_sorter.sh")
 - sudo systemctl status crond
