@@ -27,3 +27,24 @@ Crontab can be used to schedule and automate running the script.
 - sudo systemctl enable crond
 - crontab -e ( add job to run every minute) ( "* * * * * cd /home/path_to_directory && ./file_sorter.sh")
 - sudo systemctl status crond
+  
+ ### Contributors:
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/rsmythrepo">
+        <img src="https://avatars.githubusercontent.com/u/152279048?v=4" width="100px;" alt="Raphaelle Smyth"/><br />
+        <sub><b>Raphaelle Smyth</b></sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/BruNwa">
+        <img src="https://avatars.githubusercontent.com/u/106646716?v=4" width="100px;" alt="Zaim Anwar"/><br />
+        <sub><b>Zaim Anwar</b></sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/szabodavid27">
+        <img src="https://avatars.githubusercontent.com/u/155852722?v=4" width="100px;" alt="Szabó Dávid"/><br />
+        <sub><b>Szabó Dávid</b></sub>
+    </td>
+  </tr>
+</table>
